@@ -1,0 +1,5 @@
+# let's remove extensions
+Options +FollowSymLinks
+RewriteEngine on
+RewriteRule ^hotels/([0-9]+)$ hotels.php?count=$1
+RewriteRule ^reviews/([0-9]+)$ reviews.php?id=$1
