@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A jQuery based front-end for the fake hotel API">
+    <meta name="author" content="Emre Piskin">
+    <title>A jQuery based front-end for the fake hotel API by Emre Piskin</title>
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato%7CRaleway:400,700" rel="stylesheet">
+    <!-- Basic CSS file -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+<div class="container">
+
+    <!-- Section: Load Hotels button -->
+    <div class="row">
+        <div class="col-12 center">
+            <a href="#" id="btn-load" class="btn">Load Hotels</a>
+        </div>
+    </div>
+
+    <!-- Section: Loading spinner -->
+    <div id="loading" class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+
+    <!-- Section: Error box -->
+    <div id="box-error">An error occured</div>
+
+    <!-- Section: Hotels container -->
+    <div id="hotels"></div>
+
+</div>
+
+<!--
+    /** =========================
+     *   PUTTING JS FILES TO THE
+     *   BOTTOM FOR PERFORMANCE
+     *  ========================= */
+-->
+<!-- jQuery 1.12.4 -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<!-- jQuery Easing Plugin 1.3 (needed for thumbnailSlider plugin) -->
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+<!-- jQuery thumbnailSlider Plugin -->
+<script type="text/javascript" src="js/jquery.thumbnailSlider.js"></script>
+<!-- Mustache.js -->
+<script type="text/javascript" src="js/mustache.js"></script>
+
+<!--
+    /** ====================
+     *   MUSTACHE TEMPLATES
+     *  ==================== */
+-->
+<!-- Mustache template for the hotels -->
+<script id="templateHotel" type="text/template">
+    {{#arr}}
+    <div class="row box-hotel">
+        <!-- All hotel info -->
+        <div class="box-hotel-body">
+            <div class="col-5 box-hotel-image">
+                <img src="{{images.0}}" alt="" />
+
+                <!-- PreviewSlider -->
+                <div class="slider">
+                    <ul class="ts_container" style="width:{{multiply}}px">
+                        {{#images}}<li><a>i</a></li>{{/images}}
+                        <!-- animate to slide frame -->
+                        <li class="ts_thumbnails">
+                            <!-- animate left to slide to the right thumb -->
+                            <div class="ts_preview_wrapper">
+                                <ul class="ts_preview">
+                                    {{#images}}<li><img src="{{.}}" alt="" /></li>{{/images}}
+                                </ul>
+                            </div>
+                            <span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-7 box-hotel-info">
+                <h1 class="hotel-name">{{name}}</h1>
+                <h2 class="hotel-location">{{city}} - {{country}}</h2>
+                <span class="hotel-stars">{{stars}}</span>
+                <p class="hotel-description">{{description}}</p>
+                <span class="hotel-price">{{price}} €</span>
+                <span class="hotel-date">{{date_start}} - {{date_end}}</span>
+                <a class="btn btn-review" data-id="{{id}}">Show reviews</a>
+            </div>
+        </div>
+        <!-- Review box -->
+        <div id="{{id}}"></div>
+    </div>
+    {{/arr}}
+</script>
+<!-- Mustache template for the reviews -->
+<script id="templateReview" type="text/template">
+    {{#arr}}
+    <div class="col-12 box-hotel-review">
+        <div class="row">
+            <div class="col-1 center">
+                    <span class="{{#positive}}plus{{/positive}}
+                                 {{^positive}}minus{{/positive}}"></span>
+            </div>
+            <div class="col-11">
+                <p class="review-name">{{name}}</p>
+                <p class="review-text">{{comment}}</p>
+            </div>
+        </div>
+    </div>
+    {{/arr}}
+</script>
+<!-- Mustache template for the reviews: No reviews yet -->
+<script id="templateReviewEmpty" type="text/template">
+    <div class="col-12 box-hotel-review">
+        <div class="row">
+            <div class="col-1 center">
+                <span class="info"></span>
+            </div>
+            <div class="col-11">
+                <p class="review-name">There are no reviews yet.</p>
+                <p class="review-text">Write the first one!</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+    /** ====================
+     *   MAIN JS BLOCK
+     *  ==================== */
+-->
+<script type="text/javascript">
+
+    /** ==================
+     *   HELPER FUNCTIONS
+     *  ================== */
+
+    /**
+     * Capitalizes the first letter of a given string
+     *
+     * @param {string} string
+     * @returns {string}
+     */
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    /**
+     * Trims given string (optionally with an end string)
+     *
+     * @param {string} string
+     * @param {number} length
+     * @param {string} end
+     * @returns {string}
+     */
+    function trimString(string, length, end) {
+        end = end || '';
+        return string.length > length ? string.substring(0, length) + end : string;
+    }
+
+    /**
+     * Formats given string into German time format
+     *
+     * @param {string} string
+     * @returns {string}
+     */
+    function formatDate(string) {
+        var d = new Date(string);
+        return ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear();
+    }
+
+    /**
+     * Generates a string of 5 stars, filling with empty stars if necessary
+     *
+     * @param {number} stars
+     * @returns {string}
+     */
+    function formatStars(stars) {
+        var string = '', i;
+        for (i = 0; i < stars; i++)
+            string += '★';
+        for (i = 0; i < 5 - stars; i++)
+            string += '☆';
+        return string;
+    }
+
+
+    /** ===============
+     *   CONFIG
+     *  =============== */
+
+    var apiUrl = "https://rencs.com/demo/hotel/api/", // API url
+        getHotels = "hotels",   // API endpoint for hotels
+        getReviews = "reviews", // API endpoint for reviews
+        HotelCount = "5",       // Number of hotels to retrieve per Ajax call
+        HotelNameLimit = 19,    // Very long names break the view, so we limit the string
+        HotelDescLimit = 160;   // Very long descriptions break the view, so we limit the string
+
+
+    /** ===============
+     *   MAIN
+     *  =============== */
+
+    $(document).ready(function () {
+
+        /** =====================
+         *   BUTTON: Load Hotels
+         *  ===================== */
+
+        $("#btn-load").click(function() {
+            // Hide error box if shown
+            $("#box-error").hide();
+            // Empty hotel list
+            $('#hotels').html('');
+            // Show loading spinner
+            $("#loading").fadeIn();
+            // Make the Ajax call
+            $.get(apiUrl + getHotels, { count: HotelCount }, function(data) {
+                // Hide loading spinner
+                $("#loading").slideUp();
+                // Format hotel data based on the instructions
+                $.each(data, function(index, hotel) {
+                    // Very long names break the view
+                    hotel.name = trimString(capitalizeFirstLetter(hotel.name), HotelNameLimit, '…');
+                    // Very long descriptions break the view
+                    hotel.description = trimString(hotel.description, HotelDescLimit, '…');
+                    hotel.date_start = formatDate(hotel.date_start);
+                    hotel.date_end = formatDate(hotel.date_end);
+                    hotel.stars = formatStars(hotel.stars);
+                });
+                // Prepare the hotel template
+                var template = $('#templateHotel').html();
+                var html = Mustache.to_html(template, { arr: data, multiply: function() { return this.images.length * 16 } });
+                // Append hotel data into the view element
+                $('#hotels').html(html);
+
+                $('.slider').thumbnailSlider();
+            })
+            // If it fails show a notification
+                .fail(function() {
+                    // Hide loading spinner
+                    $("#loading").slideUp();
+                    // Show error box
+                    $("#box-error").fadeIn();
+                });
+        });
+
+
+        /** ======================
+         *   BUTTON: Show reviews
+         *  ====================== */
+
+        $("#hotels").on("click", ".btn-review", function() {
+            // Define variables
+            var hotelId = $(this).data("id"),
+                button = $(this),
+                reviewBox = $('#' + hotelId),
+                template,
+                html;
+            // Simple toggle solution for the button
+            if (button.text() == 'Hide reviews') {
+                button.text('Show reviews');
+                // Hide the reviews
+                reviewBox.slideUp();
+                return;
+            }
+
+            // Make the Ajax call
+            $.get(apiUrl + getReviews, { hotel_id: hotelId }, function(data) {
+                // If array is empty, show a notification
+                if (data.length == 0) {
+                    // Prepare the empty review template
+                    template = $('#templateReviewEmpty').html();
+                    html = Mustache.to_html(template);
+                }
+                else {
+                    // Prepare the review template
+                    template = $('#templateReview').html();
+                    html = Mustache.to_html(template, { arr: data });
+                }
+                // Append review data into the review box and show it
+                reviewBox.html(html).slideDown();
+                // Simple toggle solution for the button
+                button.text('Hide reviews');
+            })
+            // If it fails show a notification
+                .fail(function() {
+                    alert("An error occured");
+                });
+        });
+    });
+</script>
+</body>
