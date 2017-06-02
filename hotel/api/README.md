@@ -1,5 +1,5 @@
-# Fake hotel api server
-Fake hotel api server for demo projects
+# Fake hotel API server
+Fake hotel API server for demo projects
 
 ## Endpoints
 
