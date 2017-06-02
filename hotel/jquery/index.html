@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <head>
+    <!--- Basic page needs -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <title>A jQuery based front-end for the fake hotel API by Emre Piskin</title>
     <meta name="description" content="A jQuery based front-end for the fake hotel API">
     <meta name="author" content="Emre Piskin">
-    <title>A jQuery based front-end for the fake hotel API by Emre Piskin</title>
+
+    <!--- Social metas -->
+    <meta property="og:title" content="A jQuery based front-end for the fake hotel API" />
+    <meta property="og:description" content="A jQuery based front-end for the fake hotel API by Emre Piskin" />
+    <meta property="og:image" content="https://rencs.com/favicon.png" />
 
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato%7CRaleway:400,700" rel="stylesheet">
@@ -46,7 +51,7 @@
      *   BOTTOM FOR PERFORMANCE
      *  ========================= */
 -->
-<!-- jQuery 1.12.4 -->
+<!-- jQuery 3.2.1 -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <!-- jQuery Easing Plugin 1.3 (needed for thumbnailSlider plugin) -->
 <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
@@ -107,8 +112,7 @@
     <div class="col-12 box-hotel-review">
         <div class="row">
             <div class="col-1 center">
-                    <span class="{{#positive}}plus{{/positive}}
-                                 {{^positive}}minus{{/positive}}"></span>
+                    <span class="{{type}}"></span>
             </div>
             <div class="col-11">
                 <p class="review-name">{{name}}</p>
@@ -117,20 +121,6 @@
         </div>
     </div>
     {{/arr}}
-</script>
-<!-- Mustache template for the reviews: No reviews yet -->
-<script id="templateReviewEmpty" type="text/template">
-    <div class="col-12 box-hotel-review">
-        <div class="row">
-            <div class="col-1 center">
-                <span class="info"></span>
-            </div>
-            <div class="col-11">
-                <p class="review-name">There are no reviews yet.</p>
-                <p class="review-text">Write the first one!</p>
-            </div>
-        </div>
-    </div>
 </script>
 
 <!--
@@ -224,34 +214,38 @@
             // Show loading spinner
             $("#loading").fadeIn();
             // Make the Ajax call
-            $.get(apiUrl + getHotels, { count: HotelCount }, function(data) {
-                // Hide loading spinner
-                $("#loading").slideUp();
-                // Format hotel data based on the instructions
-                $.each(data, function(index, hotel) {
-                    // Very long names break the view
-                    hotel.name = trimString(capitalizeFirstLetter(hotel.name), HotelNameLimit, '…');
-                    // Very long descriptions break the view
-                    hotel.description = trimString(hotel.description, HotelDescLimit, '…');
-                    hotel.date_start = formatDate(hotel.date_start);
-                    hotel.date_end = formatDate(hotel.date_end);
-                    hotel.stars = formatStars(hotel.stars);
-                });
-                // Prepare the hotel template
-                var template = $('#templateHotel').html();
-                var html = Mustache.to_html(template, { arr: data, multiply: function() { return this.images.length * 16 } });
-                // Append hotel data into the view element
-                $('#hotels').html(html);
+            $.ajax({
+                url: apiUrl + getHotels,
+                data: { count: HotelCount },
+                success: function(data) {
+                    // Hide loading spinner
+                    $("#loading").slideUp();
+                    // Format hotel data based on the instructions
+                    data.forEach(function(hotel) {
+                        // Very long names break the view
+                        hotel.name = trimString(capitalizeFirstLetter(hotel.name), HotelNameLimit, '…');
+                        // Very long descriptions break the view
+                        hotel.description = trimString(hotel.description, HotelDescLimit, '…');
+                        hotel.date_start = formatDate(hotel.date_start);
+                        hotel.date_end = formatDate(hotel.date_end);
+                        hotel.stars = formatStars(hotel.stars);
+                    });
+                    // Prepare the hotel template
+                    var template = $('#templateHotel').html();
+                    var html = Mustache.to_html(template, { arr: data, multiply: function() { return this.images.length * 16 } });
+                    // Append hotel data into the view element
+                    $('#hotels').html(html);
 
-                $('.slider').thumbnailSlider();
-            })
-            // If it fails show a notification
-                .fail(function() {
+                    $('.slider').thumbnailSlider();
+                },
+                error: function(e) {
                     // Hide loading spinner
                     $("#loading").slideUp();
                     // Show error box
                     $("#box-error").fadeIn();
-                });
+                },
+                cache: false
+            });
         });
 
 
@@ -267,35 +261,54 @@
                 template,
                 html;
             // Simple toggle solution for the button
-            if (button.text() == 'Hide reviews') {
+            if (button.text() === 'Hide reviews') {
                 button.text('Show reviews');
                 // Hide the reviews
                 reviewBox.slideUp();
                 return;
             }
 
-            // Make the Ajax call
-            $.get(apiUrl + getReviews, { hotel_id: hotelId }, function(data) {
-                // If array is empty, show a notification
-                if (data.length == 0) {
-                    // Prepare the empty review template
-                    template = $('#templateReviewEmpty').html();
-                    html = Mustache.to_html(template);
-                }
-                else {
-                    // Prepare the review template
-                    template = $('#templateReview').html();
-                    html = Mustache.to_html(template, { arr: data });
-                }
+            var showReviewTemplate = function(data) {
+                // Create a comment type from "positive" property
+                data.forEach(function(el) {
+                    switch(el.positive) {
+                        case 'info': el.type = 'info'; break;
+                        case true:   el.type = 'plus'; break;
+                        case false:  el.type = 'minus'; break;
+                        default:     el.type = 'info';
+                    }
+                });
+                // Prepare the review template
+                template = $('#templateReview').html();
+                html = Mustache.to_html(template, { arr: data });
                 // Append review data into the review box and show it
                 reviewBox.html(html).slideDown();
                 // Simple toggle solution for the button
                 button.text('Hide reviews');
-            })
-            // If it fails show a notification
-                .fail(function() {
-                    alert("An error occured");
-                });
+            };
+            // Make the Ajax call
+            $.ajax({
+                url: apiUrl + getReviews,
+                data: { hotel_id: hotelId },
+                success: function(data) {
+                    // If array is empty, show a notification
+                    if (data.length === 0)
+                        data = [{
+                            positive: 'info',
+                            name: "There are no reviews yet.",
+                            comment: "Write the first one!"
+                        }];
+                    showReviewTemplate(data);
+                },
+                error: function(e) {
+                    showReviewTemplate([{
+                        positive: 'info',
+                        name: "ERROR: " + e.statusText,
+                        comment: "Please try again"
+                    }]);
+                },
+                cache: false
+            });
         });
     });
 </script>
