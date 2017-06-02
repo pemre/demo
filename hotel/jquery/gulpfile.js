@@ -28,7 +28,7 @@ gulp.task('copy-all', function () {
 
 // keeps gulp from crashing for scss errors
 gulp.task('sass', function () {
-  return gulp.src('./sass/*.scss')
+  return gulp.src('../asset/sass/*.scss')
       .pipe(sass({ errLogToConsole: true }))
       .pipe(gulp.dest('./dist/css'));
 });
@@ -42,7 +42,7 @@ gulp.task('livereload', function (){
 // watch only given files
 gulp.task('watch', function () {
   gulp.watch('./index.html', ['copy-index']);
-  gulp.watch('./sass/**/*.scss', ['sass']);
+  gulp.watch('../asset/sass/**/*.scss', ['sass']);
   gulp.watch('./dist/**/*', ['livereload']);
 });
 

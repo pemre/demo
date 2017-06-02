@@ -485,7 +485,7 @@ ul.ts_container {
     height: 11px;
     outline: none;
     padding: 0px 8px;
-    background: transparent url(../img/dot.png) no-repeat top center;
+    background: transparent url(../../jquery/img/dot.png) no-repeat top center;
   }
   & li a:hover,
   & li.selected a {
@@ -496,7 +496,7 @@ ul.ts_container {
     position: absolute;
   }
   & li.ts_thumbnails span {
-    background: transparent url(../img/triangle.png) no-repeat top center;
+    background: transparent url(../../jquery/img/triangle.png) no-repeat top center;
     width: 15px;
     height: 6px;
     position: absolute;
