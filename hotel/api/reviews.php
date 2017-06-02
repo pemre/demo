@@ -15,6 +15,8 @@ $json = new Json();
 $id = isset($_GET['hotel_id']) ? (int) $_GET['hotel_id'] : null;
 
 // Check params
+if (mt_rand(1,5) == 1) // Die by %20 chance
+  $json->error('Something failed!');
 if (!$id || $id < 0) // === 0 || === null
   $json->error('Param "hotel_id" must be set and positive integer');
 
