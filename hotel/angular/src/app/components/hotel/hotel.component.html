@@ -1,0 +1,37 @@
+<div class="row box-hotel">
+
+  <!-- All hotel info -->
+  <div class="box-hotel-body">
+    <div class="col-5 box-hotel-image">
+      <img src="{{hotel.images[0]}}" alt="" />
+    </div>
+    <div class="col-7 box-hotel-info">
+      <h1 class="hotel-name">{{hotel.name | capitalizeFirst | truncate: hotelNameLimit}}</h1>
+      <h2 class="hotel-location">{{hotel.city}} - {{hotel.country}}</h2>
+      <span class="hotel-stars">{{hotel.stars | toStars}}</span>
+      <p class="hotel-description">{{hotel.description | truncate: hotelDescLimit}}</p>
+      <span class="hotel-price">{{hotel.price}} €</span>
+      <span class="hotel-date">{{hotel.date_start | date:'dd.MM.yy'}} - {{hotel.date_end | date:'dd.MM.yy'}}</span>
+      <a class="btn btn-review" (click)="getReviews(hotel.id)">{{buttonReviewText}}</a>
+    </div>
+  </div>
+
+  <!-- Review box -->
+  <ng-template [ngIf]="listReview != null">
+    <app-review *ngFor="let review of listReview" [review]="review" class="col-12 box-hotel-review"></app-review>
+  </ng-template>
+
+  <!-- Review box: No reviews yet -->
+  <div *ngIf="showEmptyReviews == true" class="col-12 box-hotel-review">
+    <div class="row">
+      <div class="col-1 center">
+        <span class="info"></span>
+      </div>
+      <div class="col-11">
+        <p class="review-name">There are no reviews yet.</p>
+        <p class="review-text">Write the first one!</p>
+      </div>
+    </div>
+  </div>
+
+</div>

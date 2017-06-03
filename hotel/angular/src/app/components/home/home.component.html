@@ -1,0 +1,34 @@
+<div class="container">
+
+  <!-- Section: Load Hotels button -->
+  <div class="row">
+    <div class="col-12 center project-info">
+      An Angular based front-end for the
+      <a href="https://github.com/pemre/demo/tree/master/hotel/api"
+         target="_blank">fake hotel API</a> by Emre Piskin.
+      <a href="https://github.com/pemre/demo/tree/master/hotel/angular"
+         target="_blank">Go to the GitHub page</a>
+    </div>
+    <div class="col-12 center">
+      <a class="btn" (click)="getHotels()">Load Hotels</a>
+    </div>
+  </div>
+
+  <!-- Section: Loading spinner -->
+  <div *ngIf="showLoading == true" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+
+  <!-- Section: Error box -->
+  <div *ngIf="showErrorBox == true" id="box-error">An error occured</div>
+
+  <!-- Section: Hotels container -->
+  <ng-template [ngIf]="listHotel != null">
+    <app-hotel *ngFor="let hotel of listHotel" [hotel]="hotel"></app-hotel>
+  </ng-template>
+
+</div>

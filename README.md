@@ -9,6 +9,6 @@ Demo projects made with pure JS, jQuery, Angular, PHP
 
   * [API](hotel/api): A fake hotel API written in PHP. It has a few endpoints to mimic basic features.
   * [jQuery](hotel/jquery/): A jQuery based front-end for the API.
-  * Angular *
+  * [Angular](hotel/angular/): An Angular based front-end for the API.
 
 \* Coming soon
