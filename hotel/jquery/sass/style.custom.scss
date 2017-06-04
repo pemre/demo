@@ -1,0 +1,68 @@
+/* ========================
+ *  thumbnailSlider Plugin
+ * ======================== */
+ul.ts_container {
+  list-style: none;
+  padding: 0;
+  width: 200px; // dot width times number of dots
+  margin: 0 auto;
+  height: 17px;
+  position: absolute;
+  bottom: 2vmin;
+  left: 0;
+  right: 0;
+
+  & li {
+    float: left;
+  }
+  & li a {
+    display: block;
+    text-indent: -9000px;
+    width: 11px;
+    height: 11px;
+    outline: none;
+    padding: 0px 8px;
+    background: transparent url(../img/dot.png) no-repeat top center;
+  }
+  & li a:hover,
+  & li.selected a {
+    background-position: 50% -11px;
+  }
+  & li.ts_thumbnails {
+    display: none;
+    position: absolute;
+  }
+  & li.ts_thumbnails span {
+    background: transparent url(../img/triangle.png) no-repeat top center;
+    width: 15px;
+    height: 6px;
+    position: absolute;
+  }
+}
+
+.ts_preview_wrapper {
+  border: 5px solid #fff;
+  overflow: hidden;
+  position: relative;
+  -moz-box-shadow: 0px 0px 5px #999;
+  -webkit-box-shadow: 0px 0px 5px #999;
+  box-shadow: 0px 0px 5px #999;
+}
+
+ul.ts_preview {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  & li {
+    float: left;
+  }
+  & li img {
+    display: block;
+    width: 320px;
+    height: 240px;
+  }
+}

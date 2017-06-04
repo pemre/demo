@@ -1,6 +1,7 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var connect = require('gulp-connect');
+var gulp = require('gulp'),
+    sass = require('gulp-sass'),
+    concat = require('gulp-concat'),
+    connect = require('gulp-connect');
 
 // connect the server
 gulp.task('connect', function(){
@@ -28,8 +29,9 @@ gulp.task('copy-all', function () {
 
 // keeps gulp from crashing for scss errors
 gulp.task('sass', function () {
-  return gulp.src('./sass/*.scss')
-      .pipe(sass({ errLogToConsole: true }))
+  return gulp.src(['../*.scss','./sass/*.scss'])
+      .pipe(sass({ errLogToConsole: true, outputStyle: 'compressed' }))
+      .pipe(concat('style.min.css'))
       .pipe(gulp.dest('./dist/css'));
 });
 
@@ -42,7 +44,7 @@ gulp.task('livereload', function (){
 // watch only given files
 gulp.task('watch', function () {
   gulp.watch('./index.html', ['copy-index']);
-  gulp.watch('./sass/**/*.scss', ['sass']);
+  gulp.watch(['../*.scss','./sass/**/*.scss'], ['sass']);
   gulp.watch('./dist/**/*', ['livereload']);
 });
 

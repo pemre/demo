@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "hotel-angular2"
+    "name": "hotel-angular"
   },
   "apps": [
     {
@@ -19,7 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "style.scss"
+        "../../style.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
