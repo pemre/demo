@@ -15,13 +15,13 @@ import { TruncatePipe } from './pipes/truncate.pipe';
  * COMPONENTS
  */
 import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { HotelComponent } from './components/hotel/hotel.component';
+import { ReviewComponent } from './components/review/review.component';
 /**
  * SERVICES
  */
 import { HotelService } from './services/hotel.service';
-import { HomeComponent } from './components/home/home.component';
-import { HotelComponent } from './components/hotel/hotel.component';
-import { ReviewComponent } from './components/review/review.component';
 
 @NgModule({
   declarations: [

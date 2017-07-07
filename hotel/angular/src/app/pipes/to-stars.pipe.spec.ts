@@ -1,3 +1,4 @@
+/*
 import { ToStarsPipe } from './to-stars.pipe';
 
 describe('ToStarsPipe', () => {
@@ -6,3 +7,4 @@ describe('ToStarsPipe', () => {
     expect(pipe).toBeTruthy();
   });
 });
+*/

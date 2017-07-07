@@ -7,7 +7,11 @@ You can visit: http://rencs.com/demo/hotel/angular/
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Install `angular-cli` if not installed already: `$ npm install -g @angular/cli`
+
+Run `npm install` to install node modules.
+
+Now you can run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
