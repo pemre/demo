@@ -11,4 +11,8 @@ Demo projects made with pure JS, jQuery, Angular, PHP
   * [jQuery](hotel/jquery/): A jQuery based front-end for the API.
   * [Angular](hotel/angular/): An Angular based front-end for the API.
 
+* React
+
+  * React learning files from LinkedIn video course: [Become a React Developer](https://www.linkedin.com/learning/paths/become-a-react-developer)
+
 \* Coming soon
