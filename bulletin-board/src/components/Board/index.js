@@ -1,6 +1,6 @@
 import React from 'react'
-import './App.css'
-import Note from './Note'
+import Note from '../Note'
+import './index.css'
 
 let Board = React.createClass({
     propTypes: {
@@ -21,7 +21,7 @@ let Board = React.createClass({
     },
     componentWillMount() {
         if (this.props.count) {
-            let url = `http://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`;
+            let url = `https://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`;
             fetch(url)
                 .then(results => results.json())
                 .then(array => array[0])

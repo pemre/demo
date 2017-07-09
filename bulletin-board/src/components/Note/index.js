@@ -1,6 +1,6 @@
 import React from 'react'
-import './App.css'
 import Draggable from 'react-draggable'
+import './index.css'
 
 let Note = React.createClass({
     getInitialState() {
@@ -9,7 +9,7 @@ let Note = React.createClass({
     componentWillMount() {
         this.style = {
             right: this.randomBetween(0, window.innerWidth - 150, 'px'),
-            top: this.randomBetween(0, window.innerHeight - 150, 'px')
+            top: this.randomBetween(80, window.innerHeight - 150, 'px')
         }
     },
     componentDidUpdate() {

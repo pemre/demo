@@ -2,6 +2,7 @@
   "name": "bulletin-board",
   "version": "0.0.1",
   "private": true,
+  "homepage": "/demo/bulletin-board/",
   "devDependencies": {
     "react-scripts": "0.2.1"
   },

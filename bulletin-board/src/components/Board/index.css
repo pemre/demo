@@ -1,0 +1,16 @@
+div.board {
+  height: 100%;
+  overflow: hidden
+}
+
+div.board {
+  width: 100%;
+  background-color: #eab92d
+}
+
+div.board > button {
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  font-size: 1.5em
+}
