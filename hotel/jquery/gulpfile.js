@@ -21,6 +21,7 @@ gulp.task('copy-index', function () {
 gulp.task('copy-all', function () {
     return gulp.src([
         './index.html',
+        '*tpl/**/*',
         '*img/**/*',
         '*js/**/*'
     ])

@@ -1,0 +1,16 @@
+<!-- Mustache template for the reviews -->
+<script id="tpl-review" type="text/template">
+    {{#arr}}
+    <div class="col-12 box-hotel-review">
+        <div class="row">
+            <div class="col-1 center">
+                <span class="{{type}}"></span>
+            </div>
+            <div class="col-11">
+                <p class="review-name">{{name}}</p>
+                <p class="review-text">{{comment}}</p>
+            </div>
+        </div>
+    </div>
+    {{/arr}}
+</script>

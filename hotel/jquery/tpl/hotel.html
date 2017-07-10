@@ -1,0 +1,41 @@
+<!-- Mustache template for the hotels -->
+<script id="tpl-hotel" type="text/template">
+    {{#arr}}
+    <div class="row box-hotel">
+        <!-- All hotel info -->
+        <div class="box-hotel-body">
+            <div class="col-5 box-hotel-image">
+                <img src="{{images.0}}" alt="" />
+
+                <!-- PreviewSlider -->
+                <div class="slider">
+                    <ul class="ts_container" style="width:{{multiply}}px">
+                        {{#images}}<li><a>i</a></li>{{/images}}
+                        <!-- animate to slide frame -->
+                        <li class="ts_thumbnails">
+                            <!-- animate left to slide to the right thumb -->
+                            <div class="ts_preview_wrapper">
+                                <ul class="ts_preview">
+                                    {{#images}}<li><img src="{{.}}" alt="" /></li>{{/images}}
+                                </ul>
+                            </div>
+                            <span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-7 box-hotel-info">
+                <h1 class="hotel-name">{{name}}</h1>
+                <h2 class="hotel-location">{{city}} - {{country}}</h2>
+                <span class="hotel-stars">{{stars}}</span>
+                <p class="hotel-description">{{description}}</p>
+                <span class="hotel-price">{{price}} €</span>
+                <span class="hotel-date">{{date_start}} - {{date_end}}</span>
+                <a class="btn btn-review" data-id="{{id}}">Show reviews</a>
+            </div>
+        </div>
+        <!-- Review box -->
+        <div id="{{id}}"></div>
+    </div>
+    {{/arr}}
+</script>
