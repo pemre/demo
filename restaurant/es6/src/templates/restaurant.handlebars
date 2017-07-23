@@ -1,0 +1,40 @@
+{{#each restaurants}}
+<div class="resto resto--{{getStatusClassName status}}">
+    <div class="resto__name">{{name}}</div>
+    <div class="resto__favourite
+                resto__favourite--{{#if ../favourite}}true{{else}}false{{/if}}"
+         data-name="{{name}}"
+         title="{{#if ../favourite}}Remove from{{else}}Add to{{/if}} favourites">
+        ❤
+    </div>
+    <span class="resto__stars">{{stars sortingValues.ratingAverage}}</span>
+    <span class="resto__status">{{capitalizeFirst status}}</span>
+
+    <hr/>
+
+    <span class="resto__sortBy {{#is ../sortBy 'bestMatch'}}resto__sortBy--selected{{/is}}">
+        Best Match ({{sortingValues.bestMatch}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'newest'}}resto__sortBy--selected{{/is}}">
+        Newest ({{sortingValues.newest}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'ratingAverage'}}resto__sortBy--selected{{/is}}">
+        Rating Average ({{sortingValues.ratingAverage}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'distance'}}resto__sortBy--selected{{/is}}">
+        Distance ({{sortingValues.distance}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'popularity'}}resto__sortBy--selected{{/is}}">
+        Popularity ({{sortingValues.popularity}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'averageProductPrice'}}resto__sortBy--selected{{/is}}">
+        Average Product Price ({{sortingValues.averageProductPrice}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'deliveryCosts'}}resto__sortBy--selected{{/is}}">
+        Delivery Costs ({{sortingValues.deliveryCosts}})
+    </span>
+    <span class="resto__sortBy {{#is ../sortBy 'minCost'}}resto__sortBy--selected{{/is}}">
+        Min Cost ({{sortingValues.minCost}})
+    </span>
+</div>
+{{/each}}

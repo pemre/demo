@@ -1,0 +1,241 @@
+/**
+ * ==========================================================================
+ * Restaurant Stylesheet
+ * ==========================================================================
+ *
+ * @author Emre Piskin <piskin.emre@gmail.com>
+ */
+
+
+/**
+ * ==========================================================================
+ * sass-mq
+ * ==========================================================================
+ * A Sass mixin that helps you compose media queries in an elegant way
+ * @url https://github.com/sass-mq/sass-mq
+ */
+$mq-breakpoints: (
+    mobile:  320px,
+    tablet:  740px,
+    desktop: 980px,
+    wide:    1300px,
+
+    // Tweakpoints
+    desktopAd: 810px,
+    mobileLandscape: 480px
+);
+$mq-static-breakpoint: desktop;
+$mq-show-breakpoints: (mobile, mobileLandscape, tablet, desktop, wide);
+$mq-responsive: true;
+@import '../../node_modules/sass-mq/mq';
+
+
+/**
+ * ==========================================================================
+ * Formbase
+ * ==========================================================================
+ * Better default styles for common input elements
+ * @url https://github.com/electerious/formbase
+ */
+$formbase__gutter: 2rem; // Base size for margin and padding
+@import '../../node_modules/formbase/src/styles/main';
+@import './formbase.custom'; // Custom styles
+
+
+/**
+ * ==========================================================================
+ * Simple Grid
+ * ==========================================================================
+ * Simplistic 12-column grid
+ * @author Emre Piskin <piskin.emre@gmail.com>
+ */
+* {
+  box-sizing: border-box
+}
+[class*="col-"] {
+  float: left
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: block
+}
+
+/* --- For mobile: Default view --- */
+[class*="col-"] {
+  width: 100%
+}
+
+/* --- For desktop: Define 12 columns grid --- */
+@include mq($from: desktop) {
+  .col-1 { width: 8.33% }
+  .col-2 { width: 16.66% }
+  .col-3 { width: 25% }
+  .col-4 { width: 33.33% }
+  .col-5 { width: 41.66% }
+  .col-6 { width: 50% }
+  .col-7 { width: 58.33% }
+  .col-8 { width: 66.66% }
+  .col-9 { width: 75% }
+  .col-10 { width: 83.33% }
+  .col-11 { width: 91.66% }
+  .col-12 { width: 100% }
+}
+
+
+/**
+ * ==========================================================================
+ * Author's custom styles
+ * ==========================================================================
+ */
+// --- VARIABLES ---
+$border-color: #bbb;
+
+// --- MAIN TAGS ---
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #f0f0f0;
+  font-family: sans-serif;
+}
+
+// --- BLOCKS ---
+#form {
+  margin: 2rem;
+  padding: 0 1rem;
+  background: #ccc url('../img/back.jpg') no-repeat left top;
+  background-size: cover;
+  border: 1px solid $border-color;
+  color: #fff;
+
+  .form__title {
+    display: block;
+    padding: 1rem 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #000;
+  } // element
+} // Form block
+
+#container {
+  margin: 2rem
+} // Container block
+
+.resto {
+  position: relative;
+  background-color: rgb(242, 239, 224);
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+
+  @at-root #{&}__name {
+    font-size: 1.5rem;
+  } // element
+  @at-root #{&}__favourite {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+
+    @at-root #{&}:hover {
+      color: gold
+    }
+    @at-root #{&}--true {
+      color: #ff006a
+    }
+    @at-root #{&}--false {
+      color: #c6c6c6
+    }
+  } // element
+  @at-root #{&}__stars {
+    font-size: 1.5rem;
+    line-height: 1.5rem
+  } // element
+  @at-root #{&}__status {
+    color: $border-color;
+    font-style: italic;
+    line-height: 1.5rem;
+    vertical-align: top
+  } // element
+  @at-root #{&}__sortBy {
+    border: 1px solid #ccc;
+    margin-top: .4rem;
+    padding: .2rem .4rem;
+    font-size: .6rem;
+    display: inline-block;
+
+    @at-root #{&}:hover {
+      background-color: #333;
+      color: white
+    }
+    @at-root #{&}--selected {
+      font-weight: bold;
+    }
+  } // element
+  @at-root #{&}--open {
+    background-color: #fff
+  } // modifier
+  @at-root #{&}--ahead {
+    background-color: #fff3b7
+  } // modifier
+  @at-root #{&}--closed {
+    background-color: #ffd5d1
+  } // modifier
+
+  & {
+    -webkit-animation: scale .3s ease-in-out;
+    -moz-animation: scale .3s ease-in-out;
+    animation: scale .3s ease-in-out;
+  } // FadeIn animation
+  @keyframes scale {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  } // FadeIn animation
+} // Restaurant block
+
+.stars {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+
+  @at-root #{&}:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '★★★★★';
+    color: lightgray;
+  }
+  @at-root #{&}:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '★★★★★';
+    color: gold;
+    overflow: hidden;
+  }
+
+  // modifiers
+  @at-root #{&}--0:after { width: 0 }
+  @at-root #{&}--10:after { width: 10% }
+  @at-root #{&}--20:after { width: 20% }
+  @at-root #{&}--30:after { width: 30% }
+  @at-root #{&}--40:after { width: 40% }
+  @at-root #{&}--50:after { width: 50% }
+  @at-root #{&}--60:after { width: 60% }
+  @at-root #{&}--70:after { width: 70% }
+  @at-root #{&}--80:after { width: 80% }
+  @at-root #{&}--90:after { width: 90% }
+  @at-root #{&}--100:after { width: 100% }
+} // Stars block
