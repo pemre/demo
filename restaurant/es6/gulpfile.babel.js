@@ -21,8 +21,9 @@ gulp.task('test', function() {
         }));
 });
 
-// TTD - Test Driven Development
-gulp.task('ttd', function() {
+// TDD - Test Driven Development
+gulp.task('tdd', function() {
+    $.util.log('Watching changes', $.util.colors.green('OK'));
     return gulp.watch(['src/**/*.js','test/**/*.js'], ['test']);
 });
 

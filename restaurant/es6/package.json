@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "test:gulp": "gulp test",
-    "test:ttd": "gulp ttd",
+    "test:tdd": "gulp tdd",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register",
     "dev": "gulp serve",
     "prod": "gulp --production"
