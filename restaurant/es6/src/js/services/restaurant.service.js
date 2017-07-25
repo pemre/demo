@@ -46,7 +46,7 @@ export default class RestaurantService {
     filterRestaurants(restaurants, filterBy = '') {
         return restaurants
             .filter(restaurant =>
-                    // Name starts with filterBy string
+                // Name starts with filterBy string
                 restaurant.name.substring(0, filterBy.length).toUpperCase() === filterBy.toUpperCase() ||
                 // or contains filterBy string
                 restaurant.name.indexOf(filterBy) !== -1
@@ -143,3 +143,5 @@ export default class RestaurantService {
         return html;
     }
 }
+// We export the RestaurantService class so it can be require()'d in other files.
+module.exports = RestaurantService;

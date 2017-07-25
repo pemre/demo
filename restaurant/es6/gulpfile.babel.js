@@ -10,6 +10,24 @@ import buffer from 'vinyl-buffer';
 const $ = gulploadplugins({lazy: true}),
       argv = yargs.argv;
 
+// Testing
+import mocha from 'gulp-mocha';
+// var hbsfy = require("hbsfy").configure({ extensions: ["handlebars"] });
+gulp.task('test', function() {
+    return gulp.src(['test/*.js'])
+        .pipe(mocha({
+            compilers:'js:babel-core/register'
+            //, require:hbsfy
+        }));
+});
+
+// TTD - Test Driven Development
+gulp.task('ttd', function() {
+    return gulp.watch(['src/**/*.js','test/**/*.js'], ['test']);
+});
+
+
+
 // Sass Styles
 gulp.task('styles', () => {
 

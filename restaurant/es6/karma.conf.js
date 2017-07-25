@@ -1,6 +1,3 @@
-// Karma configuration
-// Generated on Mon Jul 24 2017 00:30:47 GMT+0300 (+03)
-
 module.exports = function(config) {
   config.set({
 
@@ -10,20 +7,18 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'requirejs', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
-      {pattern: 'src/js/*.js', included: false},
-      {pattern: 'src/test/**/*.spec.js', included: false}
+      {pattern: 'src/js/**/*.js'},
+      {pattern: 'test/**/*.spec.js'}
     ],
 
 
     // list of files to exclude
-    exclude: [
-    ],
+    exclude: [],
 
 
     // preprocess matching files before serving them to the browser
@@ -31,10 +26,27 @@ module.exports = function(config) {
     browserify: {
         watch: true,
         debug: true,
-        transform: [['babelify', {presets: ['es2015']}]]
+        transform: [
+            ['babelify', {presets: ['es2015']}],
+            [
+                "hbsfy",
+                {
+                    "extensions": [
+                        /*"html", */"handlebars"
+                    ]/*,
+                    "precompilerOptions": {
+                        "knownHelpersOnly": true,
+                        "knownHelpers": {
+                            "myUltimateHelper": true
+                        }
+                    }*/
+                }
+            ]
+        ]
     },
     preprocessors: {
-        '*.js': ['browserify']
+        'src/js/**/*.js': ['browserify'],
+        'test/**/*.spec.js': ['browserify']
     },
 
 
