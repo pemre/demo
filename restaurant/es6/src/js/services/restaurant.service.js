@@ -1,6 +1,9 @@
 /**
  * Restaurant Service
+ *
+ * @author Emre Piskin <piskin.emre@gmail.com>
  */
+
 import "../helpers/handlebars.helpers" // Simple Handlebars helpers for restaurant view
 import RestaurantTemplate from "../../templates/restaurant.handlebars" // Handlebars template for a restaurant
 
@@ -66,8 +69,8 @@ export default class RestaurantService {
             restaurants
                 .sort((a, b) => {
                     return (sortType === 'ASC') ?
-                        b.name.localeCompare(a.name) : // ASC: A>Z
-                        a.name.localeCompare(b.name)   // DESC: Z>A
+                        a.name.localeCompare(b.name) : // ASC: A > Z
+                        b.name.localeCompare(a.name)   // DESC: Z > A
                 }) :
             // Sort by sortingValues
             restaurants
@@ -94,6 +97,12 @@ export default class RestaurantService {
             }, {});
     }
 
+    /**
+     * Groups reastaurants into two groups (favourite and regular) based on favourites array
+     *
+     * @param {Object} restaurants
+     * @param {Array} favourites
+     */
     groupRestaurantsByFavourites(restaurants, favourites) {
         return restaurants
             .reduce(function(groups, item) {
@@ -108,6 +117,16 @@ export default class RestaurantService {
             }, {});
     }
 
+    /**
+     * Filters/sorts given restaurants and compiles templates for them
+     *
+     * @param restaurants
+     * @param filter
+     * @param sortBy
+     * @param sortType
+     * @param isFavourite
+     * @returns {String}
+     */
     renderRestaurants(restaurants, filter, sortBy, sortType, isFavourite = false) {
         let html; // Will contain HTML code of the compiled templates
 
@@ -145,3 +164,5 @@ export default class RestaurantService {
 }
 // We export the RestaurantService class so it can be require()'d in other files.
 module.exports = RestaurantService;
+
+// TODO: Add comments

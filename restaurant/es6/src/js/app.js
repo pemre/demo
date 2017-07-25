@@ -3,6 +3,7 @@
  *
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
+
 import RestaurantService from './services/restaurant.service' // Service to get/filter/sort restaurants
 import FormTemplate from '../templates/form.handlebars'       // Handlebars template for filter/sort form
 
@@ -55,7 +56,7 @@ let listRestaurants = (event = null, restaurants = cachedRestaurants) => {
     let html, // Will contain HTML code of the compiled templates
         filter      = $filterElement.value,                                       // <input.text>
         sortBy      = $sortByElement.options[$sortByElement.selectedIndex].value, // <select>
-        sortType    = $sortTypeElement.checked ? 'ASC' : 'DESC',                  // <input.checkbox>
+        sortType    = $sortTypeElement.checked ? 'DESC' : 'ASC',                  // <input.checkbox>
         favourites  = r.getFavouriteRestaurants();
 
     // Split restaurants into two groups: Favourites and regular ones
@@ -95,3 +96,8 @@ r.getRestaurants(url)
         // Oops, show the error
         console.log('FETCH ERROR: ' + error)
     });
+
+
+// TODO: Add lint definition
+// TODO: Add comments
+// TODO: Delete Karma and its dependencies

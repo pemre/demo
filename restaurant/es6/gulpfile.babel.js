@@ -1,3 +1,9 @@
+/**
+ * Gulp config file
+ *
+ * @author Emre Piskin <piskin.emre@gmail.com>
+ */
+
 import gulp from 'gulp';
 import gulploadplugins from 'gulp-load-plugins';
 import yargs from 'yargs';
@@ -14,7 +20,7 @@ const $ = gulploadplugins({lazy: true}),
 import mocha from 'gulp-mocha';
 // var hbsfy = require("hbsfy").configure({ extensions: ["handlebars"] });
 gulp.task('test', function() {
-    return gulp.src(['test/*.js'])
+    return gulp.src(['test/**/*.js'])
         .pipe(mocha({
             compilers:'js:babel-core/register'
             //, require:hbsfy
@@ -84,3 +90,5 @@ gulp.task('serve', ['styles'], () => {
 
 // Default task
 gulp.task('default', ['styles', 'scripts']);
+
+// TODO: Add comments

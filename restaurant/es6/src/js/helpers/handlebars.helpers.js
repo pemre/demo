@@ -1,4 +1,14 @@
-import Handlebars from "handlebars/runtime"
+/**
+ * Handlebars Helpers
+ *
+ * @author Emre Piskin
+ */
+
+// We need to import different modules for browsers and tests
+let Handlebars = (typeof window === 'undefined') ?
+    require('handlebars') :        // For node.js environment
+    require('handlebars/runtime'); // For browsers
+
 
 /**
  * Returns a shorter class name string for resto element to color restaurant's background
