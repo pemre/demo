@@ -8,16 +8,19 @@ An example "Favourite Restaurants list with search/filter features" web app usin
 
 You can visit: http://rencs.com/demo/restaurant/es6/
 
+## Screenshot
+![Screenshot](screenshot.png?raw=true "Screenshot")
+
 ## Installation
 
-You need Node.js and npm already installed on your system. If you need help have a look at [https://nodejs.org/](https://nodejs.org/)
+You need Node.js and npm already installed on your system. If you need help have a look at [https://nodejs.org](https://nodejs.org)
 
 Clone this repo on a terminal:
 ```
 $ git clone https://github.com/pemre/demo.git
 ```
 
-Get into restaurant/es6 folder:
+Get into `restaurant/es6` folder:
 ```
 $ cd demo/restaurant/es6/
 ```
@@ -33,7 +36,7 @@ After that execute `$ npm run dev`, point your browser to http://localhost:3000 
 ## Npm Tasks
 
 * `$ npm run dev` - starts Browsersync and serves the app for testing in different browsers (default: http://localhost:3000, Browsersync-UI at http://localhost:3001). After changes on SCSS files and JS files in `src` or HTML files in `public` the index page will be automatically refreshed.
-* `$ npm run prod` - activates production mode. It transpiles and minifies your ES6 script files in `src/js` without sourcemaps, creates a package with all imported files as `app.js` in `public/js`. It also compiles your SASS files and copies the result CSS file to `public/css`
+* `$ npm run prod` - activates production mode. It transpiles and minifies your ES6 script files in `src/js` without sourcemaps, creates a package with all imported files as `app.js` in `public/js`. It also compiles your SASS files and copies the result CSS file to `public/css`.
 * `$ npm run test` - runs Mocha tests once.
 * `$ npm run test:tdd` - activates TDD/BDD (Test/Behaviour Driven Development) mode. Any changes on JS files in `src/js` folder or test files (*.spec.js) in `test` folder will trigger Mocha to start all tests so that you can open a new terminal tab and continue development while all tests are running. You can use Mocha with Chai TDD/BDD assertion styles.
 
@@ -55,9 +58,9 @@ This project comes with these pre-installed and ready to use features:
 
 ## Structure
 
-All source files belong to the src folder. The index page itself is served off the `public` folder.
+All source files belong to the `src` folder. The index page itself is served off the `public` folder.
 
-Gulp tasks deploy your compiled and packed styles (one `styles.css`) and scripts (`app.js`) to this public folder either uncompressed with sourcemaps as default or compressed and without sourcemaps for production (use `--production` argument to gulp tasks).
+Gulp tasks deploy your compiled and packed styles (one `styles.css`) and scripts (`app.js`) to this public folder either uncompressed with sourcemaps as default or compressed and without sourcemaps for production (use `--production` argument to Gulp tasks).
 
 ```bash
 .
@@ -76,7 +79,8 @@ Gulp tasks deploy your compiled and packed styles (one `styles.css`) and scripts
 ├── gulpfile.babel.js
 ├── jsconfig.json
 ├── package.json
-└── README.md
+├── README.md
+└── screenshot.png
 ```
 
 ## Browsers support
@@ -108,7 +112,7 @@ Shortly; because it brings a standard style to your Javascript files. If you are
   <b>How to add new modules and libraries?</b>
 </summary>
 
-To add dependencies you can always use npm If your preferred library is not available as npm package or has no package.json you can use [napa](https://www.npmjs.com/package/napa) to install such packages from Git or add them manual to ```src/vendor```.
+To add dependencies you can always use npm. If your preferred library is not available as npm package or has no `package.json` file, you can use [napa](https://www.npmjs.com/package/napa) to install such packages from Git or add them manually to `src/vendor`.
 
 But of course your are free to add Bower or jspm or another JS package manager to this project.
 </details>
