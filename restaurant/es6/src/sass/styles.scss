@@ -239,3 +239,12 @@ body {
   @at-root #{&}--90:after { width: 90% }
   @at-root #{&}--100:after { width: 100% }
 } // Stars block
+
+// --- VARIOUS ---
+.center {
+  text-align: center
+}
+.project-info {
+  font-size: 0.8rem;
+  padding: 2rem 4rem 0 4rem
+}

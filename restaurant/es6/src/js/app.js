@@ -4,100 +4,113 @@
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
 
+import 'babel-polyfill'
 import RestaurantService from './services/restaurant.service' // Service to get/filter/sort restaurants
 import FormTemplate from '../templates/form.handlebars'       // Handlebars template for filter/sort form
 
-const url  = './sample.json', // Url of the API or JSON file
-      r    = new RestaurantService(),
-      $    = (selector) => { return document.querySelector(selector) },    // Shortcut for querySelector like jQuery
-      $all = (selector) => { return document.querySelectorAll(selector) }; // Shortcut for querySelectorAll like jQuery
+const url = './sample.json' // Url of the API or JSON file
+const $ = (selector) => { return document.querySelector(selector) } // Short querySelector like jQuery
+const $all = (selector) => { return document.querySelectorAll(selector) } // Short querySelectorAll like jQuery
 
+class RestaurantApp {
+  constructor (options) {
+    // Create service instance
+    this.r = new RestaurantService()
     // Caching DOM parent elements
-let $container = $('#container'), // container <div> to list restaurants
-    $form      = $('#form'),      // container <div> for filter/sort form
-    // Variables to cache after rendering FormTemplate to DOM
-    $filterElement,   // <input.text>
-    $sortByElement,   // <select>
-    $sortTypeElement, // <input.checkbox>
-    // Variable to cache the restaurants retrieved from server
-    cachedRestaurants = [];
+    this.$container = $(options.container) // container <div> to list restaurants
+    this.$form = $(options.form)           // container <div> for filter/sort form
+    // Variables to cache the Handlebars FormTemplate after rendering to DOM
+    this.$filterElement = null             // <input.text>
+    this.$sortByElement = null             // <select>
+    this.$sortTypeElement = null           // <input.checkbox>
+    // Variable to cache the restaurants retrieved from the server/json
+    this.cachedRestaurants = []
+  }
 
-
-/**
- * Generates form section from FormTemplate,
- * adds eventListeners to form elements
- */
-let listForm = () => {
-    let html; // Will contain HTML code of the compiled templates
+  /**
+   * Generates form section from FormTemplate,
+   * adds eventListeners to form elements
+   */
+  renderForm () {
+    let html // Will contain HTML code of the compiled templates
     // Generate html from the template
-    html = FormTemplate();
+    html = FormTemplate()
     // Append generated html to the form
-    $form.innerHTML = html;
+    this.$form.innerHTML = html
     // Form generated, so lets cache the elements inside it
-    $filterElement   = $('#filterElement');   // <input.text>
-    $sortByElement   = $('#sortByElement');   // <select>
-    $sortTypeElement = $('#sortTypeElement'); // <input.checkbox>
+    this.$filterElement = $('#filterElement')   // <input.text>
+    this.$sortByElement = $('#sortByElement')   // <select>
+    this.$sortTypeElement = $('#sortTypeElement') // <input.checkbox>
+    // Bind this to renderRestaurants() before calling it
+    //  so that "event" and "this" can live together,
+    //  see: https://stackoverflow.com/q/30446622
+    this.renderRestaurants = this.renderRestaurants.bind(this)
     // Add event listeners to all form elements for any clicks/changes
     // If happens, re-render the restaurant list
-    $filterElement.addEventListener('input', listRestaurants);
-    $sortByElement.addEventListener('change', listRestaurants);
-    $sortTypeElement.addEventListener('change', listRestaurants);
-};
+    this.$filterElement.addEventListener('input', this.renderRestaurants)
+    this.$sortByElement.addEventListener('change', this.renderRestaurants)
+    this.$sortTypeElement.addEventListener('change', this.renderRestaurants)
+  }
 
-/**
- * Renders restaurant list using filter/sort options from the form,
- * adds eventListeners to favourite (heart shaped) buttons.
- * Can handle passed events of EventListeners
- *
- * @param event
- * @param restaurants
- */
-let listRestaurants = (event = null, restaurants = cachedRestaurants) => {
-    let html, // Will contain HTML code of the compiled templates
-        filter      = $filterElement.value,                                       // <input.text>
-        sortBy      = $sortByElement.options[$sortByElement.selectedIndex].value, // <select>
-        sortType    = $sortTypeElement.checked ? 'DESC' : 'ASC',                  // <input.checkbox>
-        favourites  = r.getFavouriteRestaurants();
+  /**
+   * Renders restaurant list using filter/sort options from the form,
+   * adds eventListeners to favourite (heart shaped) buttons.
+   * Can handle passed events of EventListeners
+   *
+   * @param event
+   * @param restaurants
+   */
+  renderRestaurants (event = null, restaurants = this.cachedRestaurants) {
+    let html // Will contain HTML code of the compiled templates
+    let filter = this.$filterElement.value                                       // <input.text>
+    let sortBy = this.$sortByElement.options[this.$sortByElement.selectedIndex].value // <select>
+    let sortType = this.$sortTypeElement.checked ? 'DESC' : 'ASC'                  // <input.checkbox>
+    let favourites = this.r.getFavouriteRestaurants()
 
     // Split restaurants into two groups: Favourites and regular ones
-    restaurants = r.groupRestaurantsByFavourites(restaurants, favourites);
+    restaurants = this.r.groupRestaurantsByFavourites(restaurants, favourites)
 
     // Filter (by name), sort (by sortingValues), group (open/ahead/closed)
     // and generate html for each groups. Favourites are listed first
-    html =  r.renderRestaurants(restaurants.favourite, filter, sortBy, sortType, true); // Also set isFavourite to true
-    html += r.renderRestaurants(restaurants.regular, filter, sortBy, sortType);
+    html = this.r.composeRestaurantsHtml(restaurants.favourite, filter, sortBy, sortType, true) // Also set isFavourite to true
+    html += this.r.composeRestaurantsHtml(restaurants.regular, filter, sortBy, sortType)
 
     if (html) {
-        // Append generated html to the container
-        $container.innerHTML = html;
-        // Add click handler to all favourite (heart shaped) buttons
-        for (let element of $all('.resto__favourite'))
-            element.onclick = (event) => {
-                let name = event.target.getAttribute('data-name');
-                r.toggleFavouriteRestaurant(name, listRestaurants);
-            };
+      // Append generated html to the container
+      this.$container.innerHTML = html
+      // Add click handler to all favourite (heart shaped) buttons
+      for (let element of $all('.resto__favourite')) {
+        element.onclick = (event) => {
+          let name = event.target.getAttribute('data-name')
+          this.r.toggleFavouriteRestaurant(name, this.renderRestaurants)
+        }
+      }
     } else {
-        // Say 'not found' to users
-        $container.innerHTML = "There are no restaurants to show. Would you like to search again?";
+      // Say 'not found' to users
+      this.$container.innerHTML = 'There are no restaurants to show. Would you like to search again?'
     }
-};
+  }
 
-// Start rendering process by showing the form
-listForm();
-// Fetch restaurants and render them too
-r.getRestaurants(url)
-    .then((result) => {
+  getAndRenderRestaurants (url) {
+    this.r.getRestaurants(url)
+      .then((result) => {
         // Cache the results
-        cachedRestaurants = result.restaurants;
+        this.cachedRestaurants = result.restaurants
         // List the results
-        listRestaurants(null, result.restaurants); // Send 'null' as there is no form change event
-    })
-    .catch((error) => {
+        this.renderRestaurants(null, result.restaurants) // Send 'null' as there is no form change event
+      })
+      .catch((error) => {
         // Oops, show the error
         console.log('FETCH ERROR: ' + error)
-    });
+      })
+  }
+}
 
+// Creating a new instance
+let app = new RestaurantApp({container: '#container', form: '#form'})
+// Start rendering process by showing the form
+app.renderForm()
+// Fetch restaurants and render them too
+app.getAndRenderRestaurants(url)
 
-// TODO: Add lint definition
 // TODO: Add comments
-// TODO: Delete Karma and its dependencies
