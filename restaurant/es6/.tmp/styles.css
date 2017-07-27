@@ -292,7 +292,7 @@ body {
     .resto__favourite--true {
       color: #ff006a; }
     .resto__favourite--false {
-      color: #c6c6c6; }
+      color: gray; }
   .resto__stars {
     font-size: 1.5rem;
     line-height: 1.5rem; }

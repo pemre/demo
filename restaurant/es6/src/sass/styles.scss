@@ -146,7 +146,7 @@ body {
       color: #ff006a
     }
     @at-root #{&}--false {
-      color: #c6c6c6
+      color: gray
     }
   } // element
   @at-root #{&}__stars {
