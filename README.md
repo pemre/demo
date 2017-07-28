@@ -16,6 +16,6 @@ Demo projects made with pure JS, ES6, jQuery, React, Angular, PHP
 * [React](bulletin-board): An enhanced version of the example app in the LinkedIn video course, [Learning React.js](https://www.linkedin.com/learning/learning-react-js-2)
 
 ## Testing
-![BrowserStack](browserstack.png?raw=true "BrowserStack")
+<a href="https://www.browserstack.com" rel="BrowserStack" target="_blank">![https://www.browserstack.com](browserstack.png?raw=true "BrowserStack")</a>
 
 I'm using BrowserStack to test the projects on different systems. Absolutely useful!
