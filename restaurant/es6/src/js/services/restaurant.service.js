@@ -4,7 +4,7 @@
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
 
-import fetch from 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch' // Fetch for node and Browserify
 import '../helpers/handlebars.helpers' // Simple Handlebars helpers for restaurant view
 import RestaurantTemplate from '../../templates/restaurant.handlebars' // Handlebars template for a restaurant
 
@@ -34,6 +34,12 @@ export default class RestaurantService {
     return fav ? JSON.parse(fav) : []
   }
 
+  /**
+   * Adds/removes given restaurant name from the favourites list
+   *
+   * @param name
+   * @param callBackFunction
+   */
   toggleFavouriteRestaurant (name, callBackFunction) {
     // Get the array of favourite restaurants
     let favourites = this.getFavouriteRestaurants()
@@ -170,5 +176,3 @@ export default class RestaurantService {
 }
 // We export the RestaurantService class so it can be imported/require()'d in other files.
 module.exports = RestaurantService
-
-// TODO: Add comments

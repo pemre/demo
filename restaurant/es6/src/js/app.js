@@ -4,7 +4,7 @@
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
 
-import 'babel-polyfill'
+import 'babel-polyfill'                                       // Polyfill for old browsers
 import RestaurantService from './services/restaurant.service' // Service to get/filter/sort restaurants
 import FormTemplate from '../templates/form.handlebars'       // Handlebars template for filter/sort form
 
@@ -13,6 +13,11 @@ const $ = (selector) => { return document.querySelector(selector) } // Short que
 const $all = (selector) => { return document.querySelectorAll(selector) } // Short querySelectorAll like jQuery
 
 class RestaurantApp {
+  /**
+   * Creates an app instance using options object (e.g. options.container, options.form)
+   *
+   * @param options
+   */
   constructor (options) {
     // Create service instance
     this.r = new RestaurantService()
@@ -91,6 +96,11 @@ class RestaurantApp {
     }
   }
 
+  /**
+   * Gets the restaurants using Restaurant Service and caches the response
+   *
+   * @param url
+   */
   getAndRenderRestaurants (url) {
     this.r.getRestaurants(url)
       .then((result) => {
@@ -112,5 +122,3 @@ let app = new RestaurantApp({container: '#container', form: '#form'})
 app.renderForm()
 // Fetch restaurants and render them too
 app.getAndRenderRestaurants(url)
-
-// TODO: Add comments
