@@ -62,13 +62,15 @@ export default class RestaurantService {
    * @param {String} filterBy
    */
   filterRestaurants (restaurants, filterBy = '') {
-    return restaurants
-      .filter(restaurant =>
-        // Name starts with filterBy string
-        restaurant.name.substring(0, filterBy.length).toUpperCase() === filterBy.toUpperCase() ||
-        // or contains filterBy string
-        restaurant.name.indexOf(filterBy) !== -1
-      )
+    return (filterBy === '')
+      ? restaurants
+      : restaurants
+        .filter(restaurant =>
+          // Name starts with filterBy string
+          restaurant.name.substring(0, filterBy.length).toUpperCase() === filterBy.toUpperCase() ||
+          // or contains filterBy string
+          restaurant.name.indexOf(filterBy) !== -1
+        )
   }
 
   /**
@@ -142,9 +144,7 @@ export default class RestaurantService {
     let html // Will contain HTML code of the compiled templates
 
     // Priority 4: Filter restaurants first
-    if (filter !== '') {
-      restaurants = this.filterRestaurants(restaurants, filter)
-    }
+    restaurants = this.filterRestaurants(restaurants, filter)
 
     // Priority 3: Sort restaurants
     restaurants = this.sortRestaurants(restaurants, sortBy, sortType)
