@@ -4,32 +4,46 @@
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
 
-import 'babel-polyfill'                                       // Polyfill for old browsers
 import RestaurantService from './services/restaurant.service' // Service to get/filter/sort restaurants
 import FormTemplate from '../templates/form.handlebars'       // Handlebars template for filter/sort form
+import { config } from './config'                             // Config object for the app
 
-const url = './sample.json' // Url of the API or JSON file
 const $ = (selector) => { return document.querySelector(selector) } // Short querySelector like jQuery
 const $all = (selector) => { return document.querySelectorAll(selector) } // Short querySelectorAll like jQuery
 
-class RestaurantApp {
+export default class RestaurantApp {
   /**
-   * Creates an app instance using options object (e.g. options.container, options.form)
-   *
-   * @param options
+   * Creates an app instance using the config
    */
-  constructor (options) {
+  constructor () {
     // Create service instance
     this.r = new RestaurantService()
     // Caching DOM parent elements
-    this.$container = $(options.container) // container <div> to list restaurants
-    this.$form = $(options.form)           // container <div> for filter/sort form
+    this.$container = $(config.container) // container <div> to list restaurants
+    this.$form = $(config.form)           // container <div> for filter/sort form
     // Variables to cache the Handlebars FormTemplate after rendering to DOM
-    this.$filterElement = null             // <input.text>
-    this.$sortByElement = null             // <select>
-    this.$sortTypeElement = null           // <input.checkbox>
+    this.$filterElement = null            // <input.text>
+    this.$sortByElement = null            // <select>
+    this.$sortTypeElement = null          // <input.checkbox>
     // Variable to cache the restaurants retrieved from the server/json
     this.cachedRestaurants = []
+  }
+
+  /**
+   * Initializes the app
+   */
+  init () {
+    // Start rendering process by showing the form
+    this.renderForm()
+    // Fetch restaurants using the service and cache/render them
+    this.r.getRestaurants(config.url)
+      .then((result) => {
+        // Cache the results
+        this.cachedRestaurants = result.restaurants
+        // List the results
+        this.renderRestaurants(null, result.restaurants) // Send 'null' as there is no form change event
+      })
+      .catch((error) => console.log('FETCH ERROR: ' + error))
   }
 
   /**
@@ -95,30 +109,4 @@ class RestaurantApp {
       this.$container.innerHTML = 'There are no restaurants to show. Would you like to search again?'
     }
   }
-
-  /**
-   * Gets the restaurants using Restaurant Service and caches the response
-   *
-   * @param url
-   */
-  getAndRenderRestaurants (url) {
-    this.r.getRestaurants(url)
-      .then((result) => {
-        // Cache the results
-        this.cachedRestaurants = result.restaurants
-        // List the results
-        this.renderRestaurants(null, result.restaurants) // Send 'null' as there is no form change event
-      })
-      .catch((error) => {
-        // Oops, show the error
-        console.log('FETCH ERROR: ' + error)
-      })
-  }
 }
-
-// Creating a new instance
-let app = new RestaurantApp({container: '#container', form: '#form'})
-// Start rendering process by showing the form
-app.renderForm()
-// Fetch restaurants and render them too
-app.getAndRenderRestaurants(url)

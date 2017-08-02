@@ -53,13 +53,13 @@ gulp.task('styles', () => {
 // Scripts - app.js is the main entry point, you have to import all required files and modules
 gulp.task('scripts', () => {
   return browserify({
-    entries: 'src/js/app.js',
+    entries: 'src/js/index.js',
     debug: true
   })
     .transform('babelify', {presets: ['es2015']})
     .transform(handlebars)
     .bundle()
-    .pipe(source('app.js'))
+    .pipe(source('index.js'))
     .pipe(buffer())
     .pipe($.if(!argv.production, $.sourcemaps.init({loadMaps: true})))
     .pipe($.if(argv.production, $.uglify()))
