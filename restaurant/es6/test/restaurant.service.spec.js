@@ -6,22 +6,15 @@
  * @author Emre Piskin <piskin.emre@gmail.com>
  */
 
-// Chai - BDD / TDD assertion library
-import chai from 'chai'
-import chaiHtml from 'chai-html' // Plugin for "html" style assertions
+import chai from 'chai'                                                 // Chai - BDD / TDD assertion library
+import chaiHtml from 'chai-html'                                        // Plugin for "html" style assertions
+import '../src/js/helpers/handlebars.helpers'                           // Handlebars and its helpers
+import RestaurantService from '../src/js/services/restaurant.service'   // Service to test
+import RestaurantTemplate from '../src/templates/restaurant.handlebars' // Template for a single restaurant
+import { restaurants, favourites } from './sample/data'                 // Sample data for testing
 
-// Handlebars and its helpers
-import '../src/js/helpers/handlebars.helpers'
-
-// Service to test
-import RestaurantService from '../src/js/services/restaurant.service'
-import RestaurantTemplate from '../src/templates/restaurant.handlebars'
-
-// Sample data will be used for testing
-import { restaurants, favourites } from './sample/data'
-
-chai.should() // Tell chai that we'll be using the "should" style assertions
-chai.use(chaiHtml) // Register the plugin
+chai.should()      // Tell chai that we'll be using the "should" style assertions
+chai.use(chaiHtml) // Register the html plugin
 
 describe('Restaurant Service', () => {
   describe('filterRestaurants()', () => {
