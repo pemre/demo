@@ -29,12 +29,31 @@ describe('Restaurant Service', () => {
     })
 
     it('returns three results (contains test)', () => {
-      // (r.filterRestaurants(restaurants, 'am').length).should.equal(3);
       r.filterRestaurants(restaurants, 'am').should.have.lengthOf(3)
     })
 
     it('returns all results without filterBy param', () => {
       r.filterRestaurants(restaurants).should.have.lengthOf(restaurants.length)
+    })
+  })
+
+  describe('filter restaurants with byName()', () => {
+    let r
+
+    beforeEach(() => {
+      r = new RestaurantService()
+    })
+
+    it('returns one result (starts with test)', () => {
+      restaurants.filter(r.byName, 'Royal')[0].name.should.equal('Royal Thai')
+    })
+
+    it('returns three results (contains test)', () => {
+      restaurants.filter(r.byName, 'am').should.have.lengthOf(3)
+    })
+
+    it('returns all results without filterBy param', () => {
+      restaurants.filter(r.byName).should.have.lengthOf(restaurants.length)
     })
   })
 

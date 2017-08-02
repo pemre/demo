@@ -12,7 +12,7 @@ export default class RestaurantService {
   /**
    * Returns a Promise to fetch given url
    *
-   * @param url
+   * @param {String} url
    * @returns {Promise}
    */
   getRestaurants (url) {
@@ -37,8 +37,8 @@ export default class RestaurantService {
   /**
    * Adds/removes given restaurant name from the favourites list
    *
-   * @param name
-   * @param callBackFunction
+   * @param {String} name
+   * @param {Function} callBackFunction
    */
   toggleFavouriteRestaurant (name, callBackFunction) {
     // Get the array of favourite restaurants
@@ -71,6 +71,30 @@ export default class RestaurantService {
           // or contains filterBy string
           restaurant.name.indexOf(filterBy) !== -1
         )
+  }
+
+  /**
+   * This extra filter is added for filter/map/reduce/sort chaining. This is the first step.
+   * We will remove filterRestaurants() and change the sort/group functions with chainable equivalents
+   */
+
+  /**
+   * Filters restaurants by name, which "starts with" or "contains" filterBy string
+   *
+   * @param {Object} restaurant
+   * @param {Number} index
+   * @param {Array} array
+   * @param {String} filterValue
+   */
+  byName (restaurant, index, array, filterValue = this) {
+    return (filterValue === '' || filterValue === undefined)
+      ? true
+      : (
+        // Name starts with filterValue string
+        restaurant.name.substring(0, filterValue.length).toUpperCase() === filterValue.toUpperCase() ||
+        // or contains filterValue string
+        restaurant.name.indexOf(filterValue) !== -1
+      )
   }
 
   /**
@@ -113,7 +137,7 @@ export default class RestaurantService {
   }
 
   /**
-   * Groups reastaurants into two groups (favourite and regular) based on favourites array
+   * Groups restaurants into two groups (favourite and regular) based on favourites array
    *
    * @param {Object} restaurants
    * @param {Array} favourites
@@ -133,18 +157,22 @@ export default class RestaurantService {
   /**
    * Filters/sorts given restaurants and returns compiled template html
    *
-   * @param restaurants
-   * @param filter
-   * @param sortBy
-   * @param sortType
-   * @param isFavourite
+   * @param {Array} restaurants
+   * @param {String} filterValue
+   * @param {String} sortBy
+   * @param {String} sortType
+   * @param {Boolean} isFavourite
    * @returns {String}
    */
-  composeRestaurantsHtml (restaurants, filter, sortBy, sortType, isFavourite = false) {
+  composeRestaurantsHtml (restaurants, filterValue, sortBy, sortType, isFavourite = false) {
     let html // Will contain HTML code of the compiled templates
 
     // Priority 4: Filter restaurants first
-    restaurants = this.filterRestaurants(restaurants, filter)
+
+    // restaurants = this.filterRestaurants(restaurants, filter)
+    // This new filter is used for future chaining. Sort/group functions will also be chained
+    restaurants = restaurants
+      .filter(this.byName, filterValue)
 
     // Priority 3: Sort restaurants
     restaurants = this.sortRestaurants(restaurants, sortBy, sortType)
@@ -155,7 +183,7 @@ export default class RestaurantService {
     // Show restaurants in order: open, order ahead, closed
     // Use Handlebars to compile all groups
     html = RestaurantTemplate({
-      restaurants: restaurants.open,
+      restaurants: restaurants['open'],
       favourite: isFavourite,
       sortBy: sortBy
     }) // Open restaurants
@@ -165,7 +193,7 @@ export default class RestaurantService {
       sortBy: sortBy
     }) // Order ahead restaurants
     html += RestaurantTemplate({
-      restaurants: restaurants.closed,
+      restaurants: restaurants['closed'],
       favourite: isFavourite,
       sortBy: sortBy
     }) // Closed restaurants
@@ -174,3 +202,6 @@ export default class RestaurantService {
     return html
   }
 }
+
+// TODO: filterRestaurants() will be deleted
+// TODO: sort/group functions will be chainable
