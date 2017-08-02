@@ -174,5 +174,3 @@ export default class RestaurantService {
     return html
   }
 }
-// We export the RestaurantService class so it can be imported/require()'d in other files.
-module.exports = RestaurantService
