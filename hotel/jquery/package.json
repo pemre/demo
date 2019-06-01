@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "description": "A jQuery based front-end for the fake hotel API",
   "main": "index.html",
-  "scripts": {
-    "gulp": "gulp",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Emre Piskin",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pemre/demo/repository.git"
+  },
+  "scripts": {
+    "dev": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-connect": "^5.0.0",
-    "gulp-sass": "^3.1.0"
+    "gulp-connect": "^5.7.0",
+    "gulp-sass": "^4.0.2"
   }
 }
