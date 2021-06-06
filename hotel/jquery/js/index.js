@@ -2,7 +2,7 @@
  *   CONFIG
  *  =============== */
 
-var apiUrl = "https://rencs.com/demo/hotel/api/", // API url
+var apiUrl = "http://localhost/api/", // API url
     getHotels = "hotels",   // API endpoint for hotels
     getReviews = "reviews", // API endpoint for reviews
     HotelCount = "5",       // Number of hotels to retrieve per Ajax call

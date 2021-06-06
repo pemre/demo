@@ -1,6 +1,6 @@
 {
   "name": "hotel-jquery",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A jQuery based front-end for the fake hotel API",
   "main": "index.html",
   "author": "Emre Piskin",
